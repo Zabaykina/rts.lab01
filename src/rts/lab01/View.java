@@ -12,6 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class View {
 
@@ -40,73 +43,81 @@ public class View {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		controller = new Controller();
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{265, 57, 0, 0};
+		gridBagLayout.rowHeights = new int[]{14, 0, 0, 0, 172, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		frame.getContentPane().setLayout(gridBagLayout);
+														
+																JLabel lblThreadsCount = new JLabel("Количество потоков:");
+																GridBagConstraints gbc_lblThreadsCount = new GridBagConstraints();
+																gbc_lblThreadsCount.anchor = GridBagConstraints.NORTHWEST;
+																gbc_lblThreadsCount.insets = new Insets(10, 0, 5, 10);
+																gbc_lblThreadsCount.gridwidth = 2;
+																gbc_lblThreadsCount.gridx = 1;
+																gbc_lblThreadsCount.gridy = 2;
+																frame.getContentPane().add(lblThreadsCount, gbc_lblThreadsCount);
+														textArea.setTabSize(0);
+												
+																
+														JScrollPane scrollPane = new JScrollPane(textArea);
+														textArea.setEditable(false);
+														GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+														gbc_scrollPane.fill = GridBagConstraints.BOTH;
+														gbc_scrollPane.insets = new Insets(10, 10, 10, 10);
+														gbc_scrollPane.gridheight = 6;
+														gbc_scrollPane.gridx = 0;
+														gbc_scrollPane.gridy = 2;
+														frame.getContentPane().add(scrollPane, gbc_scrollPane);
+																																						
+																																								btnStart = new JButton("Start");
+																																								btnStart.addActionListener(new ActionListener() {
 
-		JLabel lblThreadsCount = new JLabel("Количество потоков:");
+																																									@Override
+																																									public void actionPerformed(ActionEvent e) {
+																																										controller.start(Integer.valueOf(textPane.getText()), textArea);
+																																										btnStart.setEnabled(false);
+																																										btnStop.setEnabled(true);
 
-		textPane = new JTextPane();
-		textPane.setText("3");
+																																									}
+																																								});
+																																								
+																																										textPane = new JTextPane();
+																																										textPane.setText("3");
+																																										GridBagConstraints gbc_textPane = new GridBagConstraints();
+																																										gbc_textPane.anchor = GridBagConstraints.NORTH;
+																																										gbc_textPane.fill = GridBagConstraints.HORIZONTAL;
+																																										gbc_textPane.insets = new Insets(0, 0, 5, 10);
+																																										gbc_textPane.gridwidth = 2;
+																																										gbc_textPane.gridx = 1;
+																																										gbc_textPane.gridy = 3;
+																																										frame.getContentPane().add(textPane, gbc_textPane);
+																																								GridBagConstraints gbc_btnStart = new GridBagConstraints();
+																																								gbc_btnStart.insets = new Insets(0, 0, 10, 5);
+																																								gbc_btnStart.anchor = GridBagConstraints.NORTH;
+																																								gbc_btnStart.fill = GridBagConstraints.HORIZONTAL;
+																																								gbc_btnStart.gridx = 1;
+																																								gbc_btnStart.gridy = 7;
+																																								frame.getContentPane().add(btnStart, gbc_btnStart);
+																																								
+																																										btnStop = new JButton("Stop");
+																																										btnStop.setEnabled(false);
+																																										btnStop.addActionListener(new ActionListener() {
 
-		btnStart = new JButton("Start");
-		btnStart.addActionListener(new ActionListener() {
+																																											@Override
+																																											public void actionPerformed(ActionEvent e) {
+																																												controller.stop();
+																																												btnStart.setEnabled(true);
+																																												btnStop.setEnabled(false);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.start(Integer.valueOf(textPane.getText()), textArea);
-				btnStart.setEnabled(false);
-				btnStop.setEnabled(true);
-
-			}
-		});
-
-		btnStop = new JButton("Stop");
-		btnStop.setEnabled(false);
-		btnStop.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controller.stop();
-				btnStart.setEnabled(true);
-				btnStop.setEnabled(false);
-
-			}
-		});
-
-				
-		JScrollPane scrollPane = new JScrollPane(textArea);
-		textArea.setEditable(false);
-
-		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnStart)
-							.addGap(6)
-							.addComponent(btnStop))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(textPane, Alignment.LEADING)
-							.addComponent(lblThreadsCount, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(scrollPane)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblThreadsCount)
-							.addGap(11)
-							.addComponent(textPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(172)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnStart)
-								.addComponent(btnStop))))
-					.addContainerGap())
-		);
-		frame.getContentPane().setLayout(groupLayout);
+																																											}
+																																										});
+																																										GridBagConstraints gbc_btnStop = new GridBagConstraints();
+																																										gbc_btnStop.insets = new Insets(0, 0, 5, 10);
+																																										gbc_btnStop.anchor = GridBagConstraints.NORTHWEST;
+																																										gbc_btnStop.gridx = 2;
+																																										gbc_btnStop.gridy = 7;
+																																										frame.getContentPane().add(btnStop, gbc_btnStop);
 	}
 }
