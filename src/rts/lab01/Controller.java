@@ -10,6 +10,11 @@ public class Controller {
 	private List<Thread> threads;
 	private JTextArea textArea;
 	
+	/**
+	 * Создание выполняющихся потоков
+	 * @param countThreads - число выполняющихся потоков
+	 * @param textArea - вывод
+	 */
 	public void start(int countThreads, JTextArea textArea){
 		this.textArea = textArea;
 		textArea.append("start" + "\n");
@@ -24,6 +29,9 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * Прерывание выполняющихся потоков
+	 */
 	public void stop(){
 		textArea.append("stop" + "\n");
 		for (Thread thread : threads) {
